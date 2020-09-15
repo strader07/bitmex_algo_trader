@@ -7,7 +7,7 @@ import ccxt, time, os, curses, keyboard
 from datetime import datetime 
 from tkinter import Spinbox, Label,Tk
 import threading,sys
-import rui3
+import ui
 
 f=open('setting','w')
 f.write('1'+'\n')
@@ -337,7 +337,7 @@ def main():
     print("Hello XBTUSD, "+contract+" ! Orderbooks loading....") 
     
     if(platform.system()=='Windows'):
-        keyboard.add_hotkey('g', rui3.g_hotkey_process)
+        keyboard.add_hotkey('g', ui.g_hotkey_process)
         os.system('mode con: cols=100 lines='+str((rows+4)*2+10))
     
     ths=[]

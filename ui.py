@@ -1,6 +1,6 @@
 from tkinter import Spinbox, Label,Tk, Button, ttk
 import ccxt,os,sys,threading
-import z19real3
+import bitmex_bot
 
 if(os.path.exists('apikey_real')==False):
     print("Please make config file !")
@@ -148,10 +148,10 @@ def g_hotkey_process():
     ths=[]
     def openUsd():
         Quantity=QtySpin.get()
-        z19real3.bitmex_post_order('XBTUSD','Buy','Market',Quantity,'')
+        bitmex_bot.bitmex_post_order('XBTUSD','Buy','Market',Quantity,'')
     def openM20():
         Quantity=QtySpin.get()
-        z19real3.bitmex_post_order(contract,'Sell','Market',Quantity,'')
+        bitmex_bot.bitmex_post_order(contract,'Sell','Market',Quantity,'')
     def OpenTrade():
         f=open('contract','r')
         contract=f.readlines()[0]
@@ -169,10 +169,10 @@ def g_hotkey_process():
 
     def closeUsd():
         Quantity=QtySpin.get()
-        z19real3.bitmex_post_order('XBTUSD','Sell','Market',Quantity,'') 
+        bitmex_bot.bitmex_post_order('XBTUSD','Sell','Market',Quantity,'') 
     def closeM20():
         Quantity=QtySpin.get()
-        z19real3.bitmex_post_order(contract,'Buy','Market',Quantity,'') 
+        bitmex_bot.bitmex_post_order(contract,'Buy','Market',Quantity,'') 
     def CloseTrade():
         f=open('contract','r')
         contract=f.readlines()[0]
