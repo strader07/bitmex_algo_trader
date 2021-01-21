@@ -2,10 +2,10 @@ from tkinter import Spinbox, Label,Tk, Button, ttk
 import ccxt,os,sys,threading
 import bitmex_bot
 
-if(os.path.exists('apikey_real')==False):
+if(os.path.exists('input/apikey_real')==False):
     print("Please make config file !")
     sys.exit()
-f=open('apikey_real','r')
+f=open('input/apikey_real','r')
 lines=f.readlines()
 f.close
 if(len(lines)!=3):
@@ -37,7 +37,7 @@ def g_hotkey_process():
     f.close()
     
     def SaveChange():
-        f=open('setting','w')
+        f=open('input/setting','w')
         f.write(QtySpin.get()+'\n')
         f.write(MaxSpin.get()+'\n')
         f.write (MinSpin.get())
@@ -74,7 +74,7 @@ def g_hotkey_process():
     MinSpin.insert(0, MinDifference)
     MinSpin.grid(column=1,row=2)
     
-    f=open('leverage','r')
+    f=open('input/leverage','r')
     USDLeverage=f.readline()[:-1]
     M20Leverage=f.readline()
     f.close()
@@ -96,25 +96,25 @@ def g_hotkey_process():
     def USDApplyLeverage():
         params={"symbol":'XBTUSD',"leverage":USDLeverageSpin.get()}
         btmx.private_post_position_leverage(params)
-        f=open('leverage','r')
+        f=open('input/leverage','r')
         lines=f.readlines()
         f.close()
         lvs=USDLeverageSpin.get()+'\n'+lines[1]
-        f=open('leverage','w')
+        f=open('input/leverage','w')
         f.write(lvs)
         f.close()
         
     def M20ApplyLeverage():
-        f=open('contract','r')
+        f=open('input/contract','r')
         contract=f.readlines()[0]
         f.close()
         params={"symbol":contract,"leverage":M20LeverageSpin.get()}
         btmx.private_post_position_leverage(params)
-        f=open('leverage','r')
+        f=open('input/leverage','r')
         lines=f.readlines()
         f.close()
         lvs=lines[0]+M20LeverageSpin.get()
-        f=open('leverage','w')
+        f=open('input/leverage','w')
         f.write(lvs)
         f.close()
         
@@ -128,7 +128,7 @@ def g_hotkey_process():
     ContractCombo= ttk.Combobox(window, width = 8, state='readonly')
     ContractCombo['values'] = ('XBTH20','XBTM20')
     ContractCombo.grid(column = 1, row = 5) 
-    f=open('contract','r')
+    f=open('input/contract','r')
     contract=f.readlines()[0]
     f.close()
     if(contract=='XBTM20'):
@@ -138,7 +138,7 @@ def g_hotkey_process():
     
     def ContractApply():
         M20Label['text']=ContractCombo.get()+' Leverage'
-        f=open('contract','w')
+        f=open('input/contract','w')
         f.write(ContractCombo.get())
         f.close()
         
@@ -153,7 +153,7 @@ def g_hotkey_process():
         Quantity=QtySpin.get()
         bitmex_bot.bitmex_post_order(contract,'Sell','Market',Quantity,'')
     def OpenTrade():
-        f=open('contract','r')
+        f=open('input/contract','r')
         contract=f.readlines()[0]
         f.close()
         th=threading.Thread(target=openUsd)
@@ -163,7 +163,7 @@ def g_hotkey_process():
         th.start()
         th1.start()
         
-        f=open('state','w')
+        f=open('input/state','w')
         f.write('Opened')
         f.close()
 
@@ -174,7 +174,7 @@ def g_hotkey_process():
         Quantity=QtySpin.get()
         bitmex_bot.bitmex_post_order(contract,'Buy','Market',Quantity,'') 
     def CloseTrade():
-        f=open('contract','r')
+        f=open('input/contract','r')
         contract=f.readlines()[0]
         f.close()
         th=threading.Thread(target=closeM20)
@@ -183,7 +183,7 @@ def g_hotkey_process():
         ths.append(th1)
         th.start()
         th1.start()  
-        f=open('state','w')
+        f=open('input/state','w')
         f.write('Closed')
         f.close()
         

@@ -9,7 +9,7 @@ from tkinter import Spinbox, Label,Tk
 import threading,sys
 import ui
 
-f=open('setting','w')
+f=open('input/setting','w')
 f.write('1'+'\n')
 f.write('300'+'\n')
 f.write('-200')
@@ -22,17 +22,17 @@ first_blank_col=""
 for i in range(first_col_width):
     first_blank_col+=" "
 
-if(os.path.exists('apikey_real')==False):
+if(os.path.exists('input/apikey_real')==False):
     print("Please make config file !")
     sys.exit()
-f=open('apikey_real','r')
+f=open('input/apikey_real','r')
 lines=f.readlines()
 f.close
 if(len(lines)!=3):
     print('Bad config!')
     sys.exit()
     
-f=open('state','w')
+f=open('input/state','w')
 f.write('None')
 f.close()
 
@@ -49,7 +49,7 @@ btmx = ccxt.bitmex({
 if lines[0].strip() == 'test':
     btmx.urls['api'] = btmx.urls['test']
 
-f=open('contract','r')
+f=open('input/contract','r')
 contract=f.readlines()[0]
 f.close()
         
@@ -57,7 +57,7 @@ params={"symbol":'XBTUSD',"leverage":'0'}
 # btmx.private_post_position_leverage(params)
 params={"symbol":contract,"leverage":'0'}
 # btmx.private_post_position_leverage(params)
-f=open('leverage','w')
+f=open('input/leverage','w')
 f.write('0'+'\n')
 f.write('0')
 f.close()
@@ -98,13 +98,13 @@ async def xbtusd_book(feed, pair, book, timestamp, receipt_timestamp):
     stdscr.refresh()
     bid="{:6.2f}".format(book[BID].items()[Max_book][0])
     ask="{:6.2f}".format(book[ASK].items()[0][0])
-    f=open('usd','w')
+    f=open('input/usd','w')
     f.write(bid+"\n")
     f.write(ask)
     f.close()
     
 async def xbtM20_book(feed, pair, book, timestamp, receipt_timestamp):
-    f=open('contract','r')
+    f=open('input/contract','r')
     contract=f.readlines()[0]
     f.close()
 
@@ -131,7 +131,7 @@ async def xbtM20_book(feed, pair, book, timestamp, receipt_timestamp):
                       fmt2.format(book[ASK].items()[i][1])+' | '+\
                       fmt2.format(ask_sum))
     
-    f=open('usd','r')
+    f=open('input/usd','r')
     usd_bid=f.readline()[:-1]
     usd_ask=f.readline()
     f.close()
@@ -139,7 +139,7 @@ async def xbtM20_book(feed, pair, book, timestamp, receipt_timestamp):
     M20_bid="{:6.2f}".format(book[BID].items()[Max_book][0])
     M20_ask="{:6.2f}".format(book[ASK].items()[0][0])
 
-    f=open('M20','w')
+    f=open('input/M20','w')
     f.write(M20_bid+"\n")
     f.write(M20_ask)
     f.close()
@@ -152,14 +152,14 @@ async def xbtM20_book(feed, pair, book, timestamp, receipt_timestamp):
     stdscr.addstr(rows*2+10,0,n("Open Difference ( XBTM20_bid - XBTUSD_ask ): "+diff_open,width))
     stdscr.addstr(rows*2+11,0,n("Close Difference ( XBTM20_ask - XBTUSD_bid ): "+diff_close,width))
     
-    f=open('setting','r')
+    f=open('input/setting','r')
     qty=f.readline()[:-1]
     max_diff=f.readline()[:-1]
     min_diff=f.readline()
     f.close()
     stdscr.addstr(rows*2+12,0,n("Quantity:"+qty+" Max Difference:"+max_diff+" Min Difference:"+min_diff,width))
     
-    f=open('state','r')
+    f=open('input/state','r')
     state=f.readline()
     f.close()
     state="Current trading state: "+state+"     "
@@ -181,12 +181,12 @@ async def xbtM20_book(feed, pair, book, timestamp, receipt_timestamp):
     stdscr.addstr(rows*2+15,0,n(' ',width))   
     stdscr.refresh()
     
-    f=open('condition','w')
+    f=open('input/condition','w')
     f.write(cond)
     f.close()    
   
 def log(data):
-    with open('real_log.txt', 'a') as f:
+    with open('input/real_log.txt', 'a') as f:
         f.write(str(datetime.now()) + ' ' + str(data) + '\n')
 
 def handle_timeout(e):
@@ -235,14 +235,14 @@ def g_hotkey_process():
     window.title(":)")
     window.geometry('250x100')
     
-    f=open('setting','r')
+    f=open('input/setting','r')
     Quantity=f.readline()[:-1]
     MaxDifference=f.readline()[:-1]
     MinDifference=f.readline()
     f.close()
     
     def SaveChange():
-        f=open('setting','w')
+        f=open('input/setting','w')
         f.write(QtySpin.get()+'\n')
         f.write(MaxSpin.get()+'\n')
         f.write(MinSpin.get())
@@ -272,7 +272,7 @@ def g_hotkey_process():
     window.mainloop()  
 
 def trade():
-    f=open('condition','r')
+    f=open('input/condition','r')
     cond=f.readline()
     f.close()
     
@@ -281,15 +281,15 @@ def trade():
     stdscr1.addstr(rows*2+15,0,n(cond+" "+str(datetime.now()),width))
     stdscr1.refresh() 
     
-    f=open('setting','r')
+    f=open('input/setting','r')
     Quantity=f.readline()[:-1]
     f.close()
     
-    f=open('state','r')
+    f=open('input/state','r')
     state=f.readline()
     f.close()
     
-    f=open('contract','r')
+    f=open('input/contract','r')
     contract=f.readlines()[0]
     f.close()
 
@@ -311,7 +311,7 @@ def trade():
         tths.append(th1)
         th.start()
         th1.start()
-        f=open('state','w')
+        f=open('input/state','w')
         f.write('Opened')
         f.close()
     elif((cond=='Close' or cond=='OpenClose') and state=='Opened'):
@@ -321,7 +321,7 @@ def trade():
         tths.append(th1)
         th.start()
         th1.start()  
-        f=open('state','w')
+        f=open('input/state','w')
         f.write('Closed')
         f.close()
         
@@ -330,7 +330,7 @@ def trade():
     
 import platform    
 def main(): 
-    f=open('contract','r')
+    f=open('input/contract','r')
     contract=f.readlines()[0]
     f.close()
     
